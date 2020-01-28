@@ -4,6 +4,14 @@ USER root
 RUN apt-get update && apt-get install -y git && \
     git clone https://github.com/diameter/rtorrent-rutorrent-shared.git a && \
     cp ./a/extra.list /etc/apt/sources.list.d/extra.list && \
+    && cd /tmp \
+    && git clone https://github.com/rakshasa/rtorrent.git \
+    && cd rtorrent \
+    && git checkout tags/v${RTORRENT_VERSION} \
+    && ./autogen.sh \
+    && ./configure --with-xmlrpc-c --with-ncurses \
+    && make \
+    && make install \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y rtorrent unzip unrar mediainfo curl php-fpm php-cli php-geoip php-mbstring php-zip nginx wget ffmpeg supervisor php-xml libarchive-zip-perl libjson-perl libxml-libxml-perl irssi sox python-pip && \
     pip install cloudscraper && \ 
